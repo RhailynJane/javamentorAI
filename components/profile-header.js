@@ -9,16 +9,16 @@ import { EditProfileDialog } from "@/components/edit-profile-dialog"
 export function ProfileHeader() {
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [profileData, setProfileData] = useState({
-    name: "Alex Johnson",
-    title: "Aspiring Java Developer",
-    location: "San Francisco, CA",
-    email: "alex.johnson@email.com",
-    bio: "Passionate about learning Java and building scalable applications. Currently focusing on Spring Boot and microservices architecture.",
-    company: "Tech Startup Inc.",
-    website: "alexjohnson.dev",
-    github: "github.com/alexjohnson",
-    linkedin: "linkedin.com/in/alexjohnson",
-    joinDate: "January 2025",
+    name: "Rhailyn Jane Cona",
+    title: "Student",
+    location: "Calgary, AB",
+    email: "crhailynjane@gmail.com",
+    bio: "Aspiring Java developer focused on building solid fundamentals and real-world projects.",
+    company: "",
+    website: "rhailynjane.dev",
+    github: "github.com/RhailynJane?01&to=2025-06-30",
+    linkedin: "linkedin.com/in/rhailyn-cona/",
+    joinDate: "October 2025",
   })
 
   const handleSave = (newData) => {
