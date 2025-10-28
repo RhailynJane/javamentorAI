@@ -8,20 +8,43 @@ import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
-import { useToast } from "@/hooks/use-toast"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
-export function SettingsForm() {
-  const { toast } = useToast()
+export function SettingsForm({ profileData, onSave }) {
+  // Profile form state - initialize from props at mount
+  const [form, setForm] = useState(() => ({
+    name: profileData?.name ?? "",
+    title: profileData?.title ?? "",
+    email: profileData?.email ?? "",
+    location: profileData?.location ?? "",
+    company: profileData?.company ?? "",
+    website: profileData?.website ?? "",
+    github: profileData?.github ?? "",
+    linkedin: profileData?.linkedin ?? "",
+    bio: profileData?.bio ?? "",
+  }))
+
   const [teachingStyle, setTeachingStyle] = useState("friendly")
   const [difficulty, setDifficulty] = useState([50])
   const [notifications, setNotifications] = useState(true)
   const [dailyGoal, setDailyGoal] = useState("30")
+  const [successOpen, setSuccessOpen] = useState(false)
 
+  const handleChange = (field, value) => setForm((p) => ({ ...p, [field]: value }))
+  const handleCancel = () => setForm({
+    name: profileData?.name ?? "",
+    title: profileData?.title ?? "",
+    email: profileData?.email ?? "",
+    location: profileData?.location ?? "",
+    company: profileData?.company ?? "",
+    website: profileData?.website ?? "",
+    github: profileData?.github ?? "",
+    linkedin: profileData?.linkedin ?? "",
+    bio: profileData?.bio ?? "",
+  })
   const handleSave = () => {
-    toast({
-      title: "Settings saved",
-      description: "Your preferences have been updated successfully.",
-    })
+    onSave?.(form)
+    setSuccessOpen(true)
   }
 
   return (
@@ -35,21 +58,47 @@ export function SettingsForm() {
         <CardContent className="space-y-4">
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="firstName">First Name</Label>
-              <Input id="firstName" defaultValue="Alex" />
+              <Label htmlFor="name">Full Name</Label>
+              <Input id="name" value={form.name} onChange={(e) => handleChange("name", e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="lastName">Last Name</Label>
-              <Input id="lastName" defaultValue="Johnson" />
+              <Label htmlFor="title">Title</Label>
+              <Input id="title" value={form.title} onChange={(e) => handleChange("title", e.target.value)} />
+            </div>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" value={form.email} onChange={(e) => handleChange("email", e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="location">Location</Label>
+              <Input id="location" value={form.location} onChange={(e) => handleChange("location", e.target.value)} />
+            </div>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="company">Company</Label>
+              <Input id="company" value={form.company} onChange={(e) => handleChange("company", e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="website">Website</Label>
+              <Input id="website" value={form.website} onChange={(e) => handleChange("website", e.target.value)} />
+            </div>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="github">GitHub</Label>
+              <Input id="github" value={form.github} onChange={(e) => handleChange("github", e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="linkedin">LinkedIn</Label>
+              <Input id="linkedin" value={form.linkedin} onChange={(e) => handleChange("linkedin", e.target.value)} />
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" defaultValue="alex.johnson@example.com" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="location">Location</Label>
-            <Input id="location" defaultValue="San Francisco, CA" />
+            <Label htmlFor="bio">Bio</Label>
+            <Input id="bio" value={form.bio} onChange={(e) => handleChange("bio", e.target.value)} />
           </div>
         </CardContent>
       </Card>
@@ -138,9 +187,22 @@ export function SettingsForm() {
 
       {/* Save Button */}
       <div className="flex justify-end gap-4">
-        <Button variant="outline">Cancel</Button>
+        <Button variant="outline" onClick={handleCancel}>Cancel</Button>
         <Button onClick={handleSave}>Save Changes</Button>
       </div>
+
+      {/* Success Modal */}
+      <Dialog open={successOpen} onOpenChange={setSuccessOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Profile updated</DialogTitle>
+          </DialogHeader>
+          <p>Your profile information has been saved successfully.</p>
+          <div className="flex justify-end pt-4">
+            <Button onClick={() => setSuccessOpen(false)}>Close</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
